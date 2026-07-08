@@ -1,8 +1,38 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
+  --background: #fafafa;
   --foreground: #171717;
+  /* AP unit palette (Unit 1 blue ... Unit 9 dark blue) */
+  --unit-1: #3b82f6;
+  --unit-2: #f97316;
+  --unit-3: #22c55e;
+  --unit-4: #ef4444;
+  --unit-5: #a855f7;
+  --unit-6: #b45309;
+  --unit-7: #ec4899;
+  --unit-8: #ca8a04;
+  --unit-9: #1e3a8a;
+  /* Neutral point palette (used when "Color by AP Unit" is off) */
+  --point-neutral: #94a3b8;
+  --point-neutral-strong: #475569;
+  --point-stroke: #ffffff;
+  --point-ring: #0f172a;
+}
+
+.dark {
+  --background: #0b0f17;
+  --foreground: #ededed;
+  /* Brighten hues that sink into the dark background */
+  --unit-6: #d97706;
+  --unit-8: #eab308;
+  --unit-9: #818cf8;
+  --point-neutral: #64748b;
+  --point-neutral-strong: #cbd5e1;
+  --point-stroke: #0b0f17;
+  --point-ring: #f1f5f9;
 }
 
 @theme inline {
@@ -12,15 +42,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

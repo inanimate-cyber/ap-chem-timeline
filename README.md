@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Why Might Chemistry Feel So Hard?
 
-## Getting Started
+An interactive timeline that lets students see the same set of chemical
+discoveries two ways: in the order history produced them, and in the order
+AP Chemistry introduces them. Built to accompany an educational YouTube
+channel. The app makes no argument about which order is "right" — it invites
+curiosity about both.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev   # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How it works
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **One dataset, two layouts.** Every discovery's position is precomputed for
+  both views ([src/lib/layout.ts](src/lib/layout.ts)); the primary button just
+  switches which target each point eases toward (1.8 s CSS transition with
+  faint motion trails).
+- **Historical mode:** x = year, y = AP topic.
+- **Curriculum mode:** x = Unit 1–9 bands (chronological within each band),
+  y = AP topic. Observations beneath the chart (median years per unit, spans,
+  etc.) are computed from the dataset at render time, never hardcoded
+  ([src/lib/stats.ts](src/lib/stats.ts)).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Data model
 
-## Learn More
+The dataset lives at
+[src/data/ap-chemistry/discoveries.json](src/data/ap-chemistry/discoveries.json).
+Each discovery appears exactly once:
 
-To learn more about Next.js, take a look at the following resources:
+```jsonc
+{
+  "id": "lewis-structures",
+  "year": 1916,
+  "title": "Lewis Structures",
+  "scientists": ["Gilbert N. Lewis"],
+  "description": "Short historical significance…",
+  "unit": 2,                          // primary AP unit
+  "topic": "Lewis Theory & Molecular Geometry", // must match units.ts
+  "additionalUnits": [8],             // optional: other units it appears under
+  "additionalTopics": ["…"],          // optional: other topics it appears under
+  "keywords": ["covalent bond", "octet"],
+  "approximateYear": false,
+  "landmark": true                    // renders a permanent label (~10–20 total)
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Unit names, colors, and the y-axis topic order are defined in
+[src/data/ap-chemistry/units.ts](src/data/ap-chemistry/units.ts). Unit colors
+are exposed as CSS variables (`--unit-1` … `--unit-9`) in
+[globals.css](src/app/globals.css) so dark mode can adjust hues.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> **Note:** the current dataset was researched and written as a seed. When the
+> Notion export of the full dataset is available, consolidate it into this same
+> file: merge duplicate discoveries (the same event listed under several AP
+> topics) into one entry, keeping the primary unit/topic and recording the rest
+> in `additionalUnits` / `additionalTopics`.
 
-## Deploy on Vercel
+## Adding a subject
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The visualization is subject-agnostic. To add General Chemistry, AP Biology,
+etc.:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Create `src/data/<subject>/units.ts` and `discoveries.json`.
+2. Register a `SubjectData` object in [src/data/subjects.ts](src/data/subjects.ts)
+   and flip its listing to `available: true`.
+3. Render `<TimelineExplorer subject={…} />` on a route.
+
+## Deployment & feedback
+
+The site deploys to GitHub Pages on every push to `main`
+([deploy workflow](.github/workflows/deploy.yml)) as a static export
+(`output: "export"` in [next.config.ts](next.config.ts)).
+
+Because hosting is static, the feedback modal is a placeholder that logs
+submissions to the browser console
+([FeedbackWidget.tsx](src/components/FeedbackWidget.tsx)). To collect real
+feedback, point `submit` at a form service (Formspree, Google Forms) or host
+on a platform with server routes (e.g. Vercel) and restore an API route.
