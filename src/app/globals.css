@@ -5,7 +5,8 @@
 :root {
   --background: #fafafa;
   --foreground: #171717;
-  /* AP unit palette (Unit 1 blue ... Unit 9 dark blue) */
+  /* AP unit palette. Slots 1–9 cover Chemistry/Biology (9 = dark-blue finale);
+     slots 10–12 extend it for subjects with more units, e.g. Physics. */
   --unit-1: #3b82f6;
   --unit-2: #f97316;
   --unit-3: #22c55e;
@@ -15,6 +16,9 @@
   --unit-7: #ec4899;
   --unit-8: #ca8a04;
   --unit-9: #1e3a8a;
+  --unit-10: #0d9488;
+  --unit-11: #8b5cf6;
+  --unit-12: #06b6d4;
   /* Neutral point palette (used when "Color by AP Unit" is off) */
   --point-neutral: #94a3b8;
   --point-neutral-strong: #475569;
@@ -29,6 +33,9 @@
   --unit-6: #d97706;
   --unit-8: #eab308;
   --unit-9: #818cf8;
+  --unit-10: #14b8a6;
+  --unit-11: #a78bfa;
+  --unit-12: #22d3ee;
   --point-neutral: #64748b;
   --point-neutral-strong: #cbd5e1;
   --point-stroke: #0b0f17;
