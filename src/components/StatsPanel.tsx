@@ -51,7 +51,7 @@ export function StatsPanel({ subject, visible }: StatsPanelProps) {
               >
                 <span
                   className="h-2 w-2 rounded-full"
-                  style={{ background: `var(--unit-${s.unit})` }}
+                  style={{ background: `var(--unit-${s.colorIndex})` }}
                 />
                 Unit {s.unit}
                 <span className="tabular-nums text-slate-400 dark:text-slate-500">

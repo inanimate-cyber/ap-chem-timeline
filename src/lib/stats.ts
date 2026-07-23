@@ -5,6 +5,8 @@ export interface UnitStat {
   unit: number;
   name: string;
   color: string;
+  /** Palette slot for coloring (mirrors UnitDef.colorIndex). */
+  colorIndex: number;
   count: number;
   medianYear: number;
   minYear: number;
@@ -37,6 +39,7 @@ export function computeStats(subject: SubjectData): SubjectStats {
       unit: u.number,
       name: u.name,
       color: u.color,
+      colorIndex: u.colorIndex ?? u.number,
       count: years.length,
       medianYear: Math.round(median(years) ?? 0),
       minYear: years[0] ?? 0,
@@ -50,7 +53,7 @@ export function computeStats(subject: SubjectData): SubjectStats {
   const u1 = unitStats[0];
   if (u1 && u1.count > 0) {
     observations.push(
-      `The ideas in Unit 1 have a median discovery year of ${u1.medianYear} — much of the atomic picture students meet first was worked out in the ${century(
+      `The ideas in Unit 1 (${u1.name}) have a median discovery year of ${u1.medianYear} — much of what students meet first was worked out in the ${century(
         u1.medianYear
       )}.`
     );

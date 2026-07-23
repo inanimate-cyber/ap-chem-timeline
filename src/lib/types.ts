@@ -35,6 +35,12 @@ export interface UnitDef {
   name: string;
   /** Hex color used when "Color by AP Unit" is on. */
   color: string;
+  /**
+   * Which slot of the shared 9-color palette (--unit-1 … --unit-9) to use.
+   * Defaults to `number`. Lets a subject with fewer units still reach the
+   * "final unit is dark blue" look (e.g. AP Biology's Unit 8 → palette 9).
+   */
+  colorIndex?: number;
   /** Topic names in curricular order; defines the y-axis row order. */
   topics: string[];
 }
@@ -43,6 +49,8 @@ export interface SubjectData {
   id: string;
   name: string;
   shortName: string;
+  /** Discipline noun for the hero, e.g. "Chemistry", "Biology". */
+  discipline: string;
   units: UnitDef[];
   discoveries: Discovery[];
 }

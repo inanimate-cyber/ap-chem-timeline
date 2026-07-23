@@ -71,10 +71,16 @@ export function TimelineChart({
     [subject, width, compact]
   );
 
-  // CSS variables (see globals.css) so dark mode can adjust hues.
+  // CSS variables (see globals.css) so dark mode can adjust hues. A unit may
+  // borrow another palette slot via colorIndex (e.g. AP Bio Unit 8 → slot 9).
   const unitColor = useMemo(
     () =>
-      new Map(subject.units.map((u) => [u.number, `var(--unit-${u.number})`])),
+      new Map(
+        subject.units.map((u) => [
+          u.number,
+          `var(--unit-${u.colorIndex ?? u.number})`,
+        ])
+      ),
     [subject]
   );
   const discoveryById = useMemo(
